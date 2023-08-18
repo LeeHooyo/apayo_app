@@ -26,7 +26,7 @@ const Result=() => {
     대답의 형식은, '병원 종류' 만 정확히 단답형으로 말해줘.`;
 ;
 
-    const url = `http://localhost:8080/bot/chat?prompt=${encodeURIComponent(prompt)}`;
+    const url = `https://101.101.218.210:7070/bot/chat?prompt=${encodeURIComponent(prompt)}`;
     try {
       const response = await axios.get(url);
       setServerResponse(response.data); // 서버에서 받은 응답 설정

@@ -29,57 +29,87 @@ const Pharmacy=() => {
     //지도 생성 및 객체 리턴
     const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
+    const currentPosition = new window.kakao.maps.LatLng(37.468022, 127.0394542);
+
+    //마커 생성
+    const marker = new window.kakao.maps.Marker({
+      map: map,
+      position: currentPosition,
+      image: new window.kakao.maps.MarkerImage(
+          "/asset/markerStar.png",
+          new window.kakao.maps.Size(24, 35),
+          { offset: new window.kakao.maps.Point(12, 35) }
+      ),
+    });
+
+    const content = '<div style="display: flex; justify-content: center; align-items: center; padding: 5px; font-size: 12px; text-align: center;background-color:white; border-radius:8px; ">현위치</div>';
+
+    var positionOverlay = new window.kakao.maps.CustomOverlay({
+      position: currentPosition ,
+      content: content  ,
+      yAnchor: 2.5 // 약간 위쪽에 위치
+    });
+
+    positionOverlay.setMap(map);
+
+    //지도 중심좌표를 접속위치로 변경
+    map.setCenter(currentPosition);
+
+    console.log("현재위치:",currentAddress);
+    //const combinedKeyword = currentAddress+" "+ keyword;
+
+    searchPlaces("서울특별시 강남구 양재동 약국", map);
     // 위치 권한 허용
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
+    // if (navigator.geolocation) {
+    //   navigator.geolocation.getCurrentPosition(function (position) {
 
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
+    //     const lat = position.coords.latitude;
+    //     const lon = position.coords.longitude;
 
-        //위도,경도 좌표 생성
-        const currentPosition = new window.kakao.maps.LatLng(lat, lon);
+    //     //위도,경도 좌표 생성
+    //     const currentPosition = new window.kakao.maps.LatLng(lat, lon);
 
-        //마커 생성
-        const marker = new window.kakao.maps.Marker({
-          map: map,
-          position: currentPosition,
-          image: new window.kakao.maps.MarkerImage(
-              "/asset/markerStar.png",
-              new window.kakao.maps.Size(24, 35),
-              { offset: new window.kakao.maps.Point(12, 35) }
-          ),
-        });
+    //     //마커 생성
+    //     const marker = new window.kakao.maps.Marker({
+    //     map: map,
+    //       position: currentPosition,
+    //       image: new window.kakao.maps.MarkerImage(
+    //         "/asset/markerStar.png",
+    //         new window.kakao.maps.Size(24, 35),
+    //         { offset: new window.kakao.maps.Point(12, 35) }
+    //       ),
+    //     });
 
-        const content = '<div style="display: flex; justify-content: center; align-items: center; padding: 5px; font-size: 12px; text-align: center;">현위치</div>';
+    //     const content = '<div style="display: flex; justify-content: center; align-items: center; padding: 5px; font-size: 12px; text-align: center;">현위치</div>';
 
-        // infowindow.setContent(content);
-        // infowindow.open(map, marker);
+    //     // infowindow.setContent(content);
+    //     // infowindow.open(map, marker);
 
-        var positionOverlay = new window.kakao.maps.CustomOverlay({
-          position: currentPosition ,
-          content: content  ,
-          yAnchor: 2.5 // 약간 위쪽에 위치
-        });
-        positionOverlay.setMap(map);
+    //     var positionOverlay = new window.kakao.maps.CustomOverlay({
+    //       position: currentPosition ,
+    //       content: content  ,
+    //       yAnchor: 2.5 // 약간 위쪽에 위치
+    //   });
+    //   positionOverlay.setMap(map);
 
-        //지도 중심좌표를 접속위치로 변경
-        map.setCenter(currentPosition);
-        const combinedKeyword = currentAddress+" "+ "약국";
-        searchPlaces(combinedKeyword, map); // 설정한 키워드로 검색
-
-
-        //주소정보얻기
-        const geocoder = new window.kakao.maps.services.Geocoder();
-        geocoder.coord2RegionCode(lon, lat, function(result, status) {
-          if (status === window.kakao.maps.services.Status.OK) {
-            const address = result[0].address_name;
-            setCurrentAddress(address);
-          }
-        });
-      });
+    //     //지도 중심좌표를 접속위치로 변경
+    //     map.setCenter(currentPosition);
+    //     const combinedKeyword = currentAddress+" "+ "약국";
+    //     searchPlaces(combinedKeyword, map); // 설정한 키워드로 검색
 
 
-    }
+    //     //주소정보얻기
+    //     const geocoder = new window.kakao.maps.services.Geocoder();
+    //     geocoder.coord2RegionCode(lon, lat, function(result, status) {
+    //       if (status === window.kakao.maps.services.Status.OK) {
+    //         const address = result[0].address_name;
+    //         setCurrentAddress(address);
+    //       }
+    //     });
+    //   });
+
+
+    // }
     //키워드로 장소찾기
     function searchPlaces(keyword,map){
       console.log("합쳐진 키워드",keyword);
